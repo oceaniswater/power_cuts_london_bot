@@ -10,3 +10,19 @@ def insert_user(telegram_id):
     connection.commit()
     cur.close()
     connection.close()
+
+# check user exist
+def check_user(telegram_id):
+    connection = Database.create_connection()
+    cur = connection.cursor()
+    try:
+        cur.execute(f'SELECT telegram_id FROM users WHERE telegram_id = {telegram_id}')
+        records = cur.fetchone()
+        cur.close()
+        connection.close()
+        print(records[0][0])
+        return records[0][0]
+    except:
+        cur.close()
+        connection.close()
+        return 0
