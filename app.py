@@ -29,14 +29,14 @@ async def on_startup(dispatcher):
 async def on_shutdown(dispatcher):
     await bot.delete_webhook()
 
+@dp.message_handler(commands=['start', 'help'])
+async def send_welcome(message: types.Message):
+    await message.reply("Hi!\nI'm EchoBot!\nPowered by aiogram.")
+
 
 @dp.message_handler()
 async def echo(message: types.Message):
     await message.answer(message.text)
-
-@dp.message_handler(commands=['start', 'help'])
-async def send_welcome(message: types.Message):
-    await message.reply("Hi!\nI'm EchoBot!\nPowered by aiogram.")
 
 
 if __name__ == '__main__':
