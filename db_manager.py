@@ -2,10 +2,10 @@ from services.Database import Database
 
 
 # insert user
-def insert_user(telegram_id):
+async def insert_user(telegram_id):
     connection = Database.create_connection()
     cur = connection.cursor()
-    cur.execute(f'INSERT INTO users(telegram_id, postcode) VALUES (%s, %s)',
+    await cur.execute(f'INSERT INTO users(telegram_id, postcode) VALUES (%s, %s)',
                 (telegram_id, None))
 
     connection.commit()
@@ -13,11 +13,11 @@ def insert_user(telegram_id):
     connection.close()
 
 # check user exist
-def check_user(telegram_id):
+async def check_user(telegram_id):
     connection = Database.create_connection()
     cur = connection.cursor()
     try:
-        cur.execute(f'SELECT telegram_id FROM users WHERE telegram_id = {telegram_id}')
+        await cur.execute(f'SELECT telegram_id FROM users WHERE telegram_id = {telegram_id}')
         records = cur.fetchone()
         cur.close()
         connection.close()
