@@ -44,7 +44,10 @@ async def get_incidents(message: types.Message):
     print(message.text)
     incidents = powercuts.search_by_postcode(message.text)
     if incidents:
-        await message.answer(f"По вашему запросу найдено {len(incidents)} проишествий")
+        textForUser = ''
+        for incident in incidents:
+            textForUser += f"Incident Reference: {incident['incidentReference']}/nDescription: {incident['incidentCategoryCustomerFriendlyDescription']}/n/n/n"
+        await message.answer(f"По вашему запросу найдено {len(incidents)} проишествий/n/n/n/n{textForUser}")
     else:
         await message.answer("По вашему запросу ничего не найдено")
 
