@@ -6,7 +6,6 @@ from aiogram import Bot, types
 import db_manager
 import powercuts
 
-
 TOKEN = os.getenv('BOT_TOKEN')
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
@@ -30,6 +29,7 @@ async def on_startup(dispatcher):
 async def on_shutdown(dispatcher):
     await bot.delete_webhook()
 
+
 @dp.message_handler(commands=['start', 'help'])
 async def send_welcome(message: types.Message):
     await message.reply("THIS IS TEST BOT. MOST OF FUNCTIONAL NOT AVAILABLE. WE FIXED IT SOON")
@@ -41,20 +41,19 @@ async def send_welcome(message: types.Message):
 
 @dp.message_handler()
 async def get_incidents(message: types.Message):
-    print(message.text)
     incidents = powercuts.search_by_postcode(message.text)
     if incidents:
         textForUser = ''
         for incident in incidents:
-            textForUser += f"Incident Reference: {incident['incidentReference']}/nDescription: {incident['incidentCategoryCustomerFriendlyDescription']}/n/n/n"
+            textForUser =+ f"Incident Reference: {incident['incidentReference']}/nDescription: {incident['incidentCategoryCustomerFriendlyDescription']}/n/n/n"
         await message.answer(f"По вашему запросу найдено {len(incidents)} проишествий/n/n/n/n{textForUser}")
     else:
         await message.answer("По вашему запросу ничего не найдено")
 
 
 if __name__ == '__main__':
-     logging.basicConfig(level=logging.INFO)
-     start_webhook(
+    logging.basicConfig(level=logging.INFO)
+    start_webhook(
         dispatcher=dp,
         webhook_path=WEBHOOK_PATH,
         skip_updates=True,
