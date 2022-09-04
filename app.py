@@ -42,7 +42,7 @@ async def send_welcome(message: types.Message):
 @dp.message_handler()
 async def get_incidents(message: types.Message):
     print(message.text)
-    incidents = await powercuts.search_by_postcode(message.text)
+    incidents = powercuts.search_by_postcode(message.text)
     if incidents:
         await message.answer(f"По вашему запросу найдено {len(incidents)} проишествий")
     else:
