@@ -45,7 +45,7 @@ async def get_incidents(message: types.Message):
     if incidents:
         textForUser = ''
         for incident in incidents:
-            textForUser =+ f"Incident Reference: {incident['incidentReference']}/nDescription: {incident['incidentCategoryCustomerFriendlyDescription']}/n/n/n"
+            textForUser += f"Incident Reference: {incident['incidentReference']}/nDescription: {incident['incidentCategoryCustomerFriendlyDescription']}/n/n/n"
         await message.answer(f"По вашему запросу найдено {len(incidents)} проишествий/n/n/n/n{textForUser}")
     else:
         await message.answer("По вашему запросу ничего не найдено")
