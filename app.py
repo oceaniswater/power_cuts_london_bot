@@ -30,6 +30,7 @@ async def on_shutdown(dispatcher):
 
 @dp.message_handler(commands=['start', 'help'])
 async def send_welcome(message: types.Message):
+    await message.reply("THIS IS TEST BOT. MOST OF FUNCTIONAL NOT AVAILABLE. WE FIXED IT SOON")
     with open('media/uk-postcode-components.gif', 'rb') as photo:
         await message.answer_photo(photo, caption="Hi, I know about power cuts in London. Just send me your postcode "
                                                   "and "
