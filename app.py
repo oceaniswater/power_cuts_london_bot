@@ -33,7 +33,7 @@ async def on_shutdown(dispatcher):
 async def send_welcome(message: types.Message):
     check = db_manager.check_user(message.chat.id)
     if check == 0:
-        db_manager.insert_user(message.chat.id)
+        await db_manager.insert_user(message.chat.id)
     await message.reply("THIS IS TEST BOT. MOST OF FUNCTIONAL NOT AVAILABLE. WE FIXED IT SOON")
     with open('media/uk-postcode-components.gif', 'rb') as photo:
         await message.answer_photo(photo, caption="Hi, I know about power cuts in London. Just send me your postcode "

@@ -20,9 +20,10 @@ def check_user(telegram_id):
         records = cur.fetchone()
         cur.close()
         connection.close()
-        print(records[0][0])
+        print(f"запись есть в бд{records[0][0]}")
         return records[0][0]
     except:
         cur.close()
         connection.close()
+        print(f"записи нет в бд")
         return 0
