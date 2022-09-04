@@ -4,6 +4,7 @@ from aiogram.dispatcher import Dispatcher
 from aiogram.utils.executor import start_webhook
 from aiogram import Bot, types
 import db_manager
+import powercuts
 
 
 TOKEN = os.getenv('BOT_TOKEN')
@@ -39,8 +40,12 @@ async def send_welcome(message: types.Message):
 
 
 @dp.message_handler()
-async def echo(message: types.Message):
-    await message.answer(message.text)
+async def get_incidents(message: types.Message):
+    incidents = powercuts.search_by_postcode(message.text)
+    if incidents:
+        await message.answer(f"По вашему запросу найдено {len(incidents)} проишествий")
+    else:
+        await message.answer("По вашему запросу ничего не найдено")
 
 
 if __name__ == '__main__':
