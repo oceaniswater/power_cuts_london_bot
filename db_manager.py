@@ -7,6 +7,7 @@ def insert_user(telegram_id):
     cur = connection.cursor()
     cur.execute(f'INSERT INTO users(telegram_id, postcode) VALUES (%s, %s)',
                 (telegram_id, None))
+
     connection.commit()
     cur.close()
     connection.close()
