@@ -32,7 +32,7 @@ async def on_shutdown(dispatcher):
 
 @dp.message_handler(commands=['start', 'help'])
 async def send_welcome(message: types.Message):
-    await message.reply("THIS IS TEST BOT. MOST OF FUNCTIONAL NOT AVAILABLE. WE FIXED IT SOON")
+    await message.answer("THIS IS TEST BOT. MOST OF FUNCTIONAL NOT AVAILABLE. WE FIXED IT SOON")
     with open('media/uk-postcode-components.gif', 'rb') as photo:
         await message.answer_photo(photo, caption="Hi, I know about power cuts in London. Just send me your postcode "
                                                   "and "
@@ -45,7 +45,7 @@ async def get_incidents(message: types.Message):
     if incidents:
         textForUser = ''
         for incident in incidents:
-            textForUser += f"Incident Reference: {incident['incidentReference']}\nDescription: {incident['incidentCategoryCustomerFriendlyDescription']}\n\n\n"
+            textForUser += f"Incident Reference: {incident['incidentReference']}\nPower Cut Type: {incident['powerCutType']}\nDescription: {incident['incidentCategoryCustomerFriendlyDescription']}\n{incident['ukpnIncident']['mainMessage']}\n\n\n\n"
         await message.answer(f"По вашему запросу найдено {len(incidents)} проишествий\n\n\n\n{textForUser}")
     else:
         await message.answer("По вашему запросу ничего не найдено")
