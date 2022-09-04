@@ -1,6 +1,5 @@
 import logging
 import os
-from aiogram import Bot
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils.executor import start_webhook
 from aiogram import Bot, types
@@ -31,7 +30,10 @@ async def on_shutdown(dispatcher):
 
 @dp.message_handler(commands=['start', 'help'])
 async def send_welcome(message: types.Message):
-    await message.reply("Hi!\nI'm EchoBot!\nPowered by aiogram.")
+    with open('media/uk-postcode-components.gif', 'rb') as photo:
+        await message.answer_photo(photo, caption="Hi, I know about power cuts in London. Just send me your postcode "
+                                                  "and "
+                                                  "I'm checking power incidents in your borough.")
 
 
 @dp.message_handler()
