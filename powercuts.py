@@ -1,7 +1,7 @@
 import json
-from cashews import cache
-
-cache.setup("mem://")
+# from cashews import cache
+#
+# cache.setup("mem://")
 
 
 # use a decorator-based API
