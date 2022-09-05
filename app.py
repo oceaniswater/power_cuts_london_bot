@@ -58,6 +58,7 @@ async def get_incidents(message: types.Message):
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
     session = CachedSession('test_cache', backend='sqlite', expire_after=10)
+
     start_webhook(
         dispatcher=dp,
         webhook_path=WEBHOOK_PATH,
