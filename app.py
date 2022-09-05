@@ -5,6 +5,7 @@ from aiogram.utils.executor import start_webhook
 from aiogram import Bot, types
 import db_manager
 import powercuts
+from requests_cache import CachedSession
 
 TOKEN = os.getenv('BOT_TOKEN')
 bot = Bot(token=TOKEN)
@@ -22,9 +23,8 @@ WEBAPP_HOST = '0.0.0.0'
 WEBAPP_PORT = os.getenv('PORT', default=8000)
 
 
-async def on_startup(dispatcher):
+async def on_startup(disdpatcher):
     await bot.set_webhook(WEBHOOK_URL, drop_pending_updates=True)
-
 
 async def on_shutdown(dispatcher):
     await bot.delete_webhook()
@@ -41,11 +41,13 @@ async def send_welcome(message: types.Message):
 
 @dp.message_handler()
 async def get_incidents(message: types.Message):
-    incidents = powercuts.search_by_postcode(message.text)
+    result = session.get('https://www.ukpowernetworks.co.uk/api/power-cut/all-incidents')
+    print(result.headers["Date"])
+    incidents = powercuts.search_by_postcode(message.text, result.json())
     if incidents:
         textForUser = ''
         for incident in incidents:
-            textForUser += f"Incident Reference: {incident['incidentReference']}\nPower Cut Type: {incident['powerCutType']}\nDescription: {incident['incidentCategoryCustomerFriendlyDescription']}\n{incident['ukpnIncident']['mainMessage']}\n\n\n\n"
+            textForUser += f"<b>%sIncident Reference:</b> {incident['incidentReference']}\n<b>%sPower Cut Type:</b> {incident['powerCutType']}\n<b>%sDescription:</b> {incident['incidentCategoryCustomerFriendlyDescription']}\n\n{incident['ukpnIncident']['mainMessage']}\n\n\n\n"
         await message.answer(f"По вашему запросу найдено {len(incidents)} проишествий\n\n\n\n{textForUser}")
     else:
         await message.answer("По вашему запросу ничего не найдено")
@@ -53,6 +55,7 @@ async def get_incidents(message: types.Message):
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
+    session = CachedSession('test_cache', backend='sqlite', expire_after=10)
     start_webhook(
         dispatcher=dp,
         webhook_path=WEBHOOK_PATH,

@@ -1,13 +1,21 @@
+import time
+
 import requests
-import json
+import requests_cache
+
+
+# requests_cache.install_cache('demo', backend='sqlite', expire_after=1)
 
 
 class ApiPowerCuts:
 
     @staticmethod
     def get_incidents_list():
+
+        # session.cache.clear()
         url = 'https://www.ukpowernetworks.co.uk/api/power-cut/all-incidents'
-        result = requests.request("GET", url)
+        result = requests.request("GET", url).json()
+
         return result
 
     @staticmethod
@@ -21,3 +29,7 @@ class ApiPowerCuts:
         url = 'https://www.ukpowernetworks.co.uk/api/power-cut/fetch-list'
         result = requests.request("GET", url)
         return result
+
+for i in range(5):
+    print(ApiPowerCuts.get_incidents_list())
+    time.sleep(1)
