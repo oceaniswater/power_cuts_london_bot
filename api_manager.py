@@ -29,7 +29,3 @@ class ApiPowerCuts:
         url = 'https://www.ukpowernetworks.co.uk/api/power-cut/fetch-list'
         result = requests.request("GET", url)
         return result
-
-for i in range(5):
-    print(ApiPowerCuts.get_incidents_list())
-    time.sleep(1)
