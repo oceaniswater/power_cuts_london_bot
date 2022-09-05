@@ -52,7 +52,7 @@ async def get_incidents(message: types.Message):
     #     await message.answer(f"По вашему запросу найдено {len(incidents)} проишествий\n\n\n\n{textForUser}")
     # else:
     #     await message.answer("По вашему запросу ничего не найдено")
-    await message.answer(result)
+    await message.answer("Time: {0} / Used Cache: {1}".format(result.headers["Date"], result.from_cache))
 
 
 if __name__ == '__main__':
