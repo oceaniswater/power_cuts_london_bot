@@ -52,7 +52,7 @@ async def get_incidents(message: types.Message):
         textForUser2 = f"По вашему запросу найдено {len(incidents)} проишествий\n\n\n\n{textForUser}"
         print("ДЛИНА СООБЩЕНИЯ ", len(textForUser2))
         if len(textForUser2) < 4000:
-            await message.answer(f"По вашему запросу найдено {len(incidents)} проишествий\n\n\n\n{textForUser}")
+            await message.answer(f"Detected {len(incidents)} incidents\n\n\n\n{textForUser}")
         else:
             limit = 4000
             chunks = [textForUser2[i:i + limit] for i in range(0, len(textForUser2), limit)]
@@ -60,7 +60,7 @@ async def get_incidents(message: types.Message):
                 await message.answer(part)
 
     else:
-        await message.answer("По вашему запросу ничего не найдено")
+        await message.answer("There are no incidents. But if you are without power now. Contact UK Power Networks.\n\n08003163105 or 105\n\nFree to call from a mobile or a landline phone")
 
 
 if __name__ == '__main__':
