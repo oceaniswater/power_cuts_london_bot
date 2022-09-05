@@ -31,5 +31,3 @@ def search_by_postcode(postcode, f):
                         break
 
         return serchedList
-
-search_by_postcode('sw')
