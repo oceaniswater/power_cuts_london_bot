@@ -49,10 +49,16 @@ async def get_incidents(message: types.Message):
         textForUser = ''
         for incident in incidents:
             textForUser += f"Incident Reference: {incident['incidentReference']}\nPower Cut Type: {incident['powerCutType']}\nDescription: {incident['incidentCategoryCustomerFriendlyDescription']}\n\n{incident['ukpnIncident']['mainMessage']}\n\n\n\n"
+            textForUser2 = f"По вашему запросу найдено {len(incidents)} проишествий\n\n\n\n{textForUser}"
+            print("ДЛИНА СООБЩЕНИЯ ", len(textForUser2))
+        if len(textForUser2) < 4000:
+            await message.answer(f"По вашему запросу найдено {len(incidents)} проишествий\n\n\n\n{textForUser}")
+        else:
+            limit = 4000
+            chunks = [str[i:i + limit] for i in range(0, len(str), limit)]
+            for part in chunks:
+                await message.answer(part)
 
-        print("ДЛИНА СООБЩЕНИЯ ", len(f"По вашему запросу найдено {len(incidents)} проишествий\n\n\n\n{textForUser}"))
-        await message.answer(f"По вашему запросу найдено {len(incidents)} проишествий\n\n\n\n{textForUser}")
-        await message.answer(f"Time: {response.headers['Date']} / Used Cache: {response.from_cache}")
     else:
         await message.answer("По вашему запросу ничего не найдено")
 
