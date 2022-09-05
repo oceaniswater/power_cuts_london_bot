@@ -55,7 +55,7 @@ async def get_incidents(message: types.Message):
             await message.answer(f"По вашему запросу найдено {len(incidents)} проишествий\n\n\n\n{textForUser}")
         else:
             limit = 4000
-            chunks = [str[i:i + limit] for i in range(0, len(str), limit)]
+            chunks = [textForUser2[i:i + limit] for i in range(0, len(textForUser2), limit)]
             for part in chunks:
                 await message.answer(part)
 
