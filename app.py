@@ -48,7 +48,7 @@ async def get_incidents(message: types.Message):
     if incidents:
         textForUser = ''
         for incident in incidents:
-            textForUser += f"<b>%sIncident Reference:</b> {incident['incidentReference']}\n<b>%sPower Cut Type:</b> {incident['powerCutType']}\n<b>%sDescription:</b> {incident['incidentCategoryCustomerFriendlyDescription']}\n\n{incident['ukpnIncident']['mainMessage']}\n\n\n\n"
+            textForUser += f"Incident Reference: {incident['incidentReference']}\nPower Cut Type: {incident['powerCutType']}\nDescription: {incident['incidentCategoryCustomerFriendlyDescription']}\n\n{incident['ukpnIncident']['mainMessage']}\n\n\n\n"
 
         print(f"По вашему запросу найдено {len(incidents)} проишествий\n\n\n\n{textForUser}")
         await message.answer(f"По вашему запросу найдено {len(incidents)} проишествий\n\n\n\n{textForUser}")
