@@ -41,23 +41,22 @@ async def send_welcome(message: types.Message):
 
 @dp.message_handler()
 async def get_incidents(message: types.Message):
-    # result = session.get('https://www.ukpowernetworks.co.uk/api/power-cut/all-incidents')
-    result = session.get('https://swapi.dev/api/')
-    print(result.headers["Date"])
-    # incidents = powercuts.search_by_postcode(message.text, result.json())
-    # if incidents:
-    #     textForUser = ''
-    #     for incident in incidents:
-    #         textForUser += f"<b>%sIncident Reference:</b> {incident['incidentReference']}\n<b>%sPower Cut Type:</b> {incident['powerCutType']}\n<b>%sDescription:</b> {incident['incidentCategoryCustomerFriendlyDescription']}\n\n{incident['ukpnIncident']['mainMessage']}\n\n\n\n"
-    #     await message.answer(f"По вашему запросу найдено {len(incidents)} проишествий\n\n\n\n{textForUser}")
-    # else:
-    #     await message.answer("По вашему запросу ничего не найдено")
-    await message.answer("Time: {0} / Used Cache: {1}".format(result.headers["Date"], result.from_cache))
+    response = session.get('https://www.ukpowernetworks.co.uk/api/power-cut/all-incidents')
+    # result = session.get('https://swapi.dev/api/')
+    print("Time: {0} / Used Cache: {1}".format(response.headers["Date"], response.from_cache))
+    incidents = powercuts.search_by_postcode(message.text, response.json())
+    if incidents:
+        textForUser = ''
+        for incident in incidents:
+            textForUser += f"<b>%sIncident Reference:</b> {incident['incidentReference']}\n<b>%sPower Cut Type:</b> {incident['powerCutType']}\n<b>%sDescription:</b> {incident['incidentCategoryCustomerFriendlyDescription']}\n\n{incident['ukpnIncident']['mainMessage']}\n\n\n\n"
+        await message.answer(f"По вашему запросу найдено {len(incidents)} проишествий\n\n\n\n{textForUser}\n\n\nTime: {response.headers['Date']} / Used Cache: {response.from_cache}")
+    else:
+        await message.answer("По вашему запросу ничего не найдено")
 
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
-    session = CachedSession('test_cache', backend='sqlite', expire_after=10)
+    session = CachedSession('test_cache', backend='sqlite', expire_after=600)
 
     start_webhook(
         dispatcher=dp,
