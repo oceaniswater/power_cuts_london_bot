@@ -51,7 +51,7 @@ async def get_incidents(message: types.Message):
             textForUser += f"Incident Reference: {incident['incidentReference']}\nPower Cut Type: {incident['powerCutType']}\nDescription: {incident['incidentCategoryCustomerFriendlyDescription']}\n\n"
         textForUser2 = f"*bold \*Detected {len(incidents)} incidents\n{textForUser}*"
         if len(textForUser2) < 4000:
-            await message.answer(f"Detected {len(incidents)} incidents:\n\n{textForUser}")
+            await message.answer(textForUser2)
         else:
             limit = 4000
             chunks = [textForUser2[i:i + limit] for i in range(0, len(textForUser2), limit)]
