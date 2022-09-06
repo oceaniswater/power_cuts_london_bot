@@ -43,25 +43,23 @@ async def send_welcome(message: types.Message):
 @dp.message_handler()
 async def get_incidents(message: types.Message):
     response = session.get('https://www.ukpowernetworks.co.uk/api/power-cut/all-incidents')
-    # result = session.get('https://swapi.dev/api/')
     print("Time: {0} / Used Cache: {1}".format(response.headers["Date"], response.from_cache))
     incidents = powercuts.search_by_postcode(message.text, response.json())
     if incidents:
         textForUser = ''
         for incident in incidents:
-            textForUser += f"Incident Reference: {incident['incidentReference']}\nPower Cut Type: {incident['powerCutType']}\nDescription: {incident['incidentCategoryCustomerFriendlyDescription']}\n\n\n\n"
-        textForUser2 = f"Detected {len(incidents)} incidents\n\n{textForUser}"
-        print("ДЛИНА СООБЩЕНИЯ ", len(textForUser2))
+            textForUser += f"Incident Reference: {incident['incidentReference']}\nPower Cut Type: {incident['powerCutType']}\nDescription: {incident['incidentCategoryCustomerFriendlyDescription']}\n\n"
+        textForUser2 = f"*bold \*Detected {len(incidents)} incidents\n{textForUser}*"
         if len(textForUser2) < 4000:
-            await message.answer(f"Detected {len(incidents)} incidents\n\n\n\n{textForUser}")
+            await message.answer(f"Detected {len(incidents)} incidents:\n\n{textForUser}")
         else:
             limit = 4000
             chunks = [textForUser2[i:i + limit] for i in range(0, len(textForUser2), limit)]
             for part in chunks:
                 await message.answer(part)
-
     else:
-        await message.answer("There are no incidents. But if you are without power now. Contact UK Power Networks.\n\n08003163105 or 105\n\nFree to call from a mobile or a landline phone")
+        await message.answer("There are no incidents. But if you are without power now. Contact UK Power "
+                             "Networks.\n\n08003163105 or 105\n\nFree to call from a mobile or a landline phone")
 
 
 if __name__ == '__main__':
