@@ -58,19 +58,8 @@ async def get_incidents(message: types.Message):
             for part in chunks:
                 await message.answer(part)
     else:
-        await message.answer("There are no incidents. But if you are without power now. Contact UK Power "
-                             "Networks.\n\n08003163105 or 105\n\nFree to call from a mobile or a landline phone\n\n"
-                             "*bold text*"
-"_italic text_"
-"[inline URL](http://www.example.com/)"
-"[inline mention of a user](tg://user?id=123456789)"
-"inline fixed-width code"
-"```"
-"pre-formatted fixed-width code block"
-"```"
-"```python"
-"pre-formatted fixed-width code block written in the Python programming language"
-"```")
+        await message.answer("<b>There are</b> no incidents. But if you are without power now. Contact UK Power "
+                             "Networks.\n\n08003163105 or 105\n\nFree to call from a mobile or a landline phone\n\n")
 
 
 if __name__ == '__main__':
