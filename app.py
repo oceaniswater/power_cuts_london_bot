@@ -49,7 +49,7 @@ async def get_incidents(message: types.Message):
         textForUser = ''
         for incident in incidents:
             textForUser += f"Incident Reference: {incident['incidentReference']}\nPower Cut Type: {incident['powerCutType']}\nDescription: {incident['incidentCategoryCustomerFriendlyDescription']}\n\n"
-        textForUser2 = f"*bold \*Detected {len(incidents)} incidents\n{textForUser}*"
+        textForUser2 = f"*bold \*Detected {len(incidents)} incidents:*\n{textForUser}"
         if len(textForUser2) < 4000:
             await message.answer(textForUser2)
         else:
