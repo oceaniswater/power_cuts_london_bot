@@ -32,11 +32,12 @@ async def on_shutdown(dispatcher):
 
 @dp.message_handler(commands=['start', 'help'])
 async def send_welcome(message: types.Message):
-    await message.answer("THIS IS TEST BOT. MOST OF FUNCTIONAL NOT AVAILABLE. WE FIXED IT SOON")
     with open('media/uk-postcode-components.gif', 'rb') as photo:
-        await message.answer_photo(photo, caption="Hi, I know about power cuts in London. Just send me your postcode "
-                                                  "and "
-                                                  "I'm checking power incidents in your borough.")
+        await message.answer_photo(photo, caption="Hi, I am Powerbot and I know about power cuts in London. Just send "
+                                                  "me your postcode or a part of it and "
+                                                  "I will check power incidents in your borough.\n\nThis is an "
+                                                  "unofficial bot which takes open data from Distribution Network "
+                                                  "Operator | UK Power Networks")
 
 
 @dp.message_handler()
@@ -48,8 +49,8 @@ async def get_incidents(message: types.Message):
     if incidents:
         textForUser = ''
         for incident in incidents:
-            textForUser += f"Incident Reference: {incident['incidentReference']}\nPower Cut Type: {incident['powerCutType']}\nDescription: {incident['incidentCategoryCustomerFriendlyDescription']}\n\n{incident['ukpnIncident']['mainMessage']}\n\n\n\n"
-        textForUser2 = f"По вашему запросу найдено {len(incidents)} проишествий\n\n\n\n{textForUser}"
+            textForUser += f"Incident Reference: {incident['incidentReference']}\nPower Cut Type: {incident['powerCutType']}\nDescription: {incident['incidentCategoryCustomerFriendlyDescription']}\n\n\n\n"
+        textForUser2 = f"Detected {len(incidents)} incidents\n\n{textForUser}"
         print("ДЛИНА СООБЩЕНИЯ ", len(textForUser2))
         if len(textForUser2) < 4000:
             await message.answer(f"Detected {len(incidents)} incidents\n\n\n\n{textForUser}")
