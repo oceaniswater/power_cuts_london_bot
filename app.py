@@ -1,6 +1,7 @@
 import logging
 import os
 from aiogram.dispatcher import Dispatcher
+from aiogram.types import ParseMode
 from aiogram.utils.executor import start_webhook
 from aiogram import Bot, types
 import db_manager
@@ -48,8 +49,8 @@ async def get_incidents(message: types.Message):
     if incidents:
         textForUser = ''
         for incident in incidents:
-            textForUser += f"Incident Reference: {incident['incidentReference']}\nPower Cut Type: {incident['powerCutType']}\nDescription: {incident['incidentCategoryCustomerFriendlyDescription']}\n\n"
-        textForUser2 = f"*bold \*Detected {len(incidents)} incidents:*\n{textForUser}"
+            textForUser += f"Incident Reference: {incident['incidentReference']}\nPower Cut Type: {incident['powerCutType']}\nDescription: {incident['incidentCategoryCustomerFriendlyDescription']}\nPost codes affected: {incident['ukpnIncident']['postCodesAffected']}\n\n"
+        textForUser2 = f"Detected {len(incidents)} incidents:\n{textForUser}"
         if len(textForUser2) < 4000:
             await message.answer(textForUser2)
         else:
@@ -58,8 +59,8 @@ async def get_incidents(message: types.Message):
             for part in chunks:
                 await message.answer(part)
     else:
-        await message.answer("<b>There are</b> no incidents. But if you are without power now. Contact UK Power "
-                             "Networks.\n\n08003163105 or 105\n\nFree to call from a mobile or a landline phone\n\n")
+        await message.answer("*bold \*There are no incidents.* But if you are without power now. Contact UK Power "
+                             "Networks.\n\n08003163105 or 105\n\nFree to call from a mobile or a landline phone\n\n", parse_mode=ParseMode.MARKDOWN_V2)
 
 
 if __name__ == '__main__':
@@ -75,15 +76,3 @@ if __name__ == '__main__':
         host=WEBAPP_HOST,
         port=WEBAPP_PORT,
     )
-
-from api_manager import ApiPowerCuts
-import db_manager
-# result = ApiPowerCuts.get_incidents_list()
-# print(result.json())
-# import powercuts
-
-# db_manager.insert_user(99585850989)
-#
-# l = powercuts.search_by_postcode('')
-# print(len(l))
-# print(list(l.keys()))
