@@ -12,6 +12,6 @@ def search_by_postcode(postcode, json):
 
     return serchedList
 
-def get_incident_by_id(id):
+def get_incident_by_id():
     with open('test_jsons/unplaned_incident.json') as json:
         return json
