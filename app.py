@@ -34,6 +34,7 @@ async def send_incident(message: types.Message):
     incident = api_manager.ApiPowerCuts.get_incident_by_id('INCD-320571-Z')
     incident = incident.json()
     print(incident)
+
     textForUser2 = f"Incident Reference: {incident['result']['incidentReference']}\n\n" \
                    f"Power Cut Type: {incident['result']['powerCutType']}\n" \
                    f"Detected time: {incident['result']['ukpnIncident']['receivedDate']}\n" \
