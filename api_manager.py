@@ -22,7 +22,8 @@ class ApiPowerCuts:
     def get_incident_by_id(incident_id):
         url = f'https://www.ukpowernetworks.co.uk/api/power-cut/incident-by-id?id={incident_id}'
         result = requests.request("GET", url)
-        return result.json()
+        print(result.status_code)
+        return result
 
     @staticmethod
     def get_fetch_list():
