@@ -32,20 +32,20 @@ async def on_shutdown(dispatcher):
 @dp.message_handler(commands=['test'])
 async def send_incident(message: types.Message):
     # incident = api_manager.ApiPowerCuts.get_incident_by_id(id)
-    incident = powercuts.get_incident_by_id()
-    textForUser2 = f"Incident Reference: {incident['result']['incidentReference']}\n\n" \
-                   f"Power Cut Type: {incident['result']['powerCutType']}\n" \
-                   f"Detected time: {incident['result']['ukpnIncident']['receivedDate']}\n" \
-                   f"Estimated Restoration Date: {incident['result']['ukpnIncident']['estimatedRestorationDate'] if incident['result']['ukpnIncident']['estimatedRestorationDate'] is not None else 'Date unknown'}\n" \
-                   f"Description: {incident['result']['ukpnIncident']['incidentCategoryCustomerFriendlyDescription']}\n" \
-                   f"Actual status: {[step['message'] for step in incident['result']['steps'] if incident['result']['steps']['active'] == True]}\n"
-    if len(textForUser2) < 4000:
-        await message.answer(textForUser2)
-    else:
-        limit = 4000
-        chunks = [textForUser2[i:i + limit] for i in range(0, len(textForUser2), limit)]
-        for part in chunks:
-            await message.answer(part)
+    with open('test_jsons/unplaned_incident.json') as incident:
+        textForUser2 = f"Incident Reference: {incident['result']['incidentReference']}\n\n" \
+                       f"Power Cut Type: {incident['result']['powerCutType']}\n" \
+                       f"Detected time: {incident['result']['ukpnIncident']['receivedDate']}\n" \
+                       f"Estimated Restoration Date: {incident['result']['ukpnIncident']['estimatedRestorationDate'] if incident['result']['ukpnIncident']['estimatedRestorationDate'] is not None else 'Date unknown'}\n" \
+                       f"Description: {incident['result']['ukpnIncident']['incidentCategoryCustomerFriendlyDescription']}\n" \
+                       f"Actual status: {[step['message'] for step in incident['result']['steps'] if incident['result']['steps']['active'] == True]}\n"
+        if len(textForUser2) < 4000:
+            await message.answer(textForUser2)
+        else:
+            limit = 4000
+            chunks = [textForUser2[i:i + limit] for i in range(0, len(textForUser2), limit)]
+            for part in chunks:
+                await message.answer(part)
 
 @dp.message_handler(commands=['start', 'help'])
 async def send_welcome(message: types.Message):
