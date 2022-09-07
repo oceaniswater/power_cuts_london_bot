@@ -1,7 +1,6 @@
 import logging
 import os
 from aiogram.dispatcher import Dispatcher
-from aiogram.types import ParseMode
 from aiogram.utils.executor import start_webhook
 from aiogram import Bot, types
 import db_manager
@@ -59,8 +58,8 @@ async def get_incidents(message: types.Message):
             for part in chunks:
                 await message.answer(part)
     else:
-        await message.answer("*bold \*There are no incidents.* But if you are without power now. Contact UK Power "
-                             "Networks.\n\n08003163105 or 105\n\nFree to call from a mobile or a landline phone\n\n", parse_mode=ParseMode.MARKDOWN_V2)
+        await message.answer("There are no incidents. But if you are without power now. Contact UK Power "
+                             "Networks.\n\n08003163105 or 105\n\nFree to call from a mobile or a landline phone\n\n")
 
 
 if __name__ == '__main__':
