@@ -3,7 +3,7 @@ import os
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils.executor import start_webhook
 from aiogram import Bot, types
-import db_manager
+import api_manager
 import powercuts
 from requests_cache import CachedSession
 
@@ -29,6 +29,23 @@ async def on_startup(disdpatcher):
 async def on_shutdown(dispatcher):
     await bot.delete_webhook()
 
+@dp.message_handler(commands=['test'])
+async def send_incident(message: types.Message):
+    # incident = api_manager.ApiPowerCuts.get_incident_by_id(id)
+    incident = powercuts.get_incident_by_id('INCD-325663-Z')
+    textForUser2 = f"Incident Reference: {incident['result']['incidentReference']}\n\n" \
+                   f"Power Cut Type: {incident['result']['powerCutType']}\n" \
+                   f"Detected time: {incident['result']['ukpnIncident']['receivedDate']}\n" \
+                   f"Estimated Restoration Date: {incident['result']['ukpnIncident']['estimatedRestorationDate'] if incident['result']['ukpnIncident']['estimatedRestorationDate'] is not None else 'Date unknown'}\n" \
+                   f"Description: {incident['result']['ukpnIncident']['incidentCategoryCustomerFriendlyDescription']}\n" \
+                   f"Actual status: {[step['message'] for step in incident['result']['steps'] if incident['result']['steps']['active'] == True]}\n"
+    if len(textForUser2) < 4000:
+        await message.answer(textForUser2)
+    else:
+        limit = 4000
+        chunks = [textForUser2[i:i + limit] for i in range(0, len(textForUser2), limit)]
+        for part in chunks:
+            await message.answer(part)
 
 @dp.message_handler(commands=['start', 'help'])
 async def send_welcome(message: types.Message):
@@ -48,7 +65,7 @@ async def get_incidents(message: types.Message):
     if incidents:
         textForUser = ''
         for incident in incidents:
-            textForUser += f"Incident Reference: {incident['incidentReference']}\nPower Cut Type: {incident['powerCutType']}\nDescription: {incident['incidentCategoryCustomerFriendlyDescription']}\nPost codes affected: {incident['ukpnIncident']['postCodesAffected']}\n\n"
+            textForUser += f"Incident Reference: {incident['incidentReference']}\n\nPower Cut Type: {incident['powerCutType']}\nDescription: {incident['incidentCategoryCustomerFriendlyDescription']}\nPost codes affected: {incident['ukpnIncident']['postCodesAffected']}\n\n"
         textForUser2 = f"Detected {len(incidents)} incidents:\n{textForUser}"
         if len(textForUser2) < 4000:
             await message.answer(textForUser2)
