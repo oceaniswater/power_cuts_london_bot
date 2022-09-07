@@ -31,7 +31,7 @@ async def on_shutdown(dispatcher):
 
 @dp.message_handler(commands=['test'])
 async def send_incident(message: types.Message):
-    incident = api_manager.ApiPowerCuts.get_incident_by_id('INCD-320571-Z').json()
+    incident = await api_manager.ApiPowerCuts.get_incident_by_id('INCD-320571-Z').json()
     print(incident)
     # incident = powercuts.get_incident_by_id(id)
     textForUser2 = f"Incident Reference: {incident['result']['incidentReference']}\n\n" \
