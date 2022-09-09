@@ -14,7 +14,7 @@ inline_kb_full.insert(InlineKeyboardButton("query='qwerty'", switch_inline_query
 inline_kb_full.insert(InlineKeyboardButton("Inline в этом же чате", switch_inline_query_current_chat='wasd'))
 
 def make_inline_keybord(ids):
-    inline_kb_full = InlineKeyboardMarkup(row_width=1)
+    inline_kb_full = InlineKeyboardMarkup(row_width=3)
     for i in ids:
         inline_kb_full.add(InlineKeyboardButton(i, callback_data=i))
     return inline_kb_full
