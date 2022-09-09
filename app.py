@@ -47,11 +47,6 @@ async def get_incident(message: types.Message, id):
         for part in chunks:
             await message.answer(part)
 
-@dp.callback_query_handler(func=lambda c: c.data and c.data.startswith('INCD'))
-async def process_callback_kb1btn1(callback_query: types.CallbackQuery):
-    code = callback_query.data[-1]
-    await bot.send_message(callback_query.from_user.id, f'Нажата инлайн кнопка! code={code}')
-
 @dp.message_handler(commands=['start', 'help'])
 async def send_welcome(message: types.Message):
     with open('media/uk-postcode-components.gif', 'rb') as photo:
@@ -60,6 +55,11 @@ async def send_welcome(message: types.Message):
                                                   "I will check power incidents in your borough.\n\nThis is an "
                                                   "unofficial bot which takes open data from Distribution Network "
                                                   "Operator | UK Power Networks")
+
+@dp.callback_query_handler(func=lambda c: c.data and c.data.startswith('INCD'))
+async def process_callback_kb1btn1(callback_query: types.CallbackQuery):
+    code = callback_query.data[-1]
+    await bot.send_message(callback_query.from_user.id, f'Нажата инлайн кнопка! code={code}')
 
 
 @dp.message_handler()
@@ -82,6 +82,8 @@ async def get_incidents(message: types.Message):
     else:
         await message.answer("There are no incidents. But if you are without power now. Contact UK Power "
                              "Networks.\n\n08003163105 or 105\n\nFree to call from a mobile or a landline phone\n\n")
+
+
 
 
 if __name__ == '__main__':
