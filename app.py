@@ -63,7 +63,7 @@ async def process_callback_kb1btn1(callback_query: types.CallbackQuery):
     code = callback_query.data
     # m = get_incident(code)
     # await bot.send_message(callback_query.from_user.id, m)
-    await get_incident(callback_query.from_user.id, code)
+    await get_incident(callback_query, code)
 
 @dp.message_handler()
 async def get_incidents(message: types.Message):
