@@ -16,5 +16,5 @@ inline_kb_full.insert(InlineKeyboardButton("Inline в этом же чате", s
 def make_inline_keybord(ids):
     inline_kb_full = InlineKeyboardMarkup(row_width=2)
     for i in ids:
-        inline_kb_full = InlineKeyboardMarkup(row_width=2).add(InlineKeyboardButton(i, callback_data=i))
+        inline_kb_full.add(InlineKeyboardButton(i, callback_data=i))
     return inline_kb_full
