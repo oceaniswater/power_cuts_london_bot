@@ -47,9 +47,9 @@ async def get_incident(message: types.Message, id):
         for part in chunks:
             await message.answer(part)
 
-@dp.callback_query_handler(func=lambda c: c.data and c.data.startswith('btn'))
-async def process_callback_kb1btn1(callback_query: types.CallbackQuery):
-    await bot.answer_callback_query(callback_query.id)
+# @dp.callback_query_handler(func=lambda c: c.data and c.data.startswith('btn'))
+# async def process_callback_kb1btn1(callback_query: types.CallbackQuery):
+#     await bot.answer_callback_query(callback_query.id)
 
 @dp.message_handler(commands=['start', 'help'])
 async def send_welcome(message: types.Message):
