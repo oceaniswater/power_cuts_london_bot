@@ -30,7 +30,7 @@ async def on_startup(disdpatcher):
 async def on_shutdown(dispatcher):
     await bot.delete_webhook()
 
-async def get_incident(message: types.Message, id):
+async def get_incident(callback_query, id):
     incident = api_manager.ApiPowerCuts.get_incident_by_id(id)
     incident = incident.json()
     textForUser2 = f"Incident Reference: {incident['result']['incidentReference']}\n\n" \
@@ -40,12 +40,14 @@ async def get_incident(message: types.Message, id):
                    f"Description: {incident['result']['incidentCategoryCustomerFriendlyDescription']}\n" \
                    f"Actual status: {[step['message'] for step in incident['result']['steps'] if step['active'] == True]}\n"
     if len(textForUser2) < 4000:
-        await message.answer(textForUser2)
+        # await message.answer(textForUser2)
+        await bot.send_message(callback_query.from_user.id, textForUser2)
     else:
         limit = 4000
         chunks = [textForUser2[i:i + limit] for i in range(0, len(textForUser2), limit)]
         for part in chunks:
-            await message.answer(part)
+            # await message.answer(part)
+            await bot.send_message(callback_query.from_user.id, part)
 
 @dp.message_handler(commands=['start', 'help'])
 async def send_welcome(message: types.Message):
@@ -58,9 +60,10 @@ async def send_welcome(message: types.Message):
 
 @dp.callback_query_handler(lambda c: c.data and c.data.startswith('INCD'))
 async def process_callback_kb1btn1(callback_query: types.CallbackQuery):
-    id = callback_query.data
-    message = get_incident(id)
-    await bot.send_message(callback_query.from_user.id, message)
+    code = callback_query.data
+    m = get_incident(code)
+    # await bot.send_message(callback_query.from_user.id, m)
+    await get_incident(callback_query.from_user.id, code)
 
 @dp.message_handler()
 async def get_incidents(message: types.Message):
