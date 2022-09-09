@@ -39,7 +39,7 @@ async def send_incident(message: types.Message):
                    f"Power Cut Type: {incident['result']['powerCutType']}\n" \
                    f"Detected time: {incident['result']['ukpnIncident']['receivedDate']}\n" \
                    f"Estimated Restoration Date: {incident['result']['ukpnIncident']['estimatedRestorationDate'] if incident['result']['ukpnIncident']['estimatedRestorationDate'] is not None else 'Date unknown'}\n" \
-                   f"Description: {incident['result']['ukpnIncident']['incidentCategoryCustomerFriendlyDescription']}\n" \
+                   f"Description: {incident['result']['incidentCategoryCustomerFriendlyDescription']}\n" \
                    f"Actual status: {[step['message'] for step in incident['result']['steps'] if incident['result']['steps']['active'] == True]}\n"
     if len(textForUser2) < 4000:
         await message.answer(textForUser2)
