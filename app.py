@@ -58,18 +58,9 @@ async def send_welcome(message: types.Message):
 
 @dp.callback_query_handler(lambda c: c.data and c.data.startswith('INCD'))
 async def process_callback_kb1btn1(callback_query: types.CallbackQuery):
-    code = callback_query.data[-1]
-    if code.isdigit():
-        code = int(code)
-    if code == 2:
-        await bot.answer_callback_query(callback_query.id, text='Нажата вторая кнопка')
-    elif code == 5:
-        await bot.answer_callback_query(
-            callback_query.id,
-            text='Нажата кнопка с номером 5.\nА этот текст может быть длиной до 200 символов 😉', show_alert=True)
-    else:
-        await bot.answer_callback_query(callback_query.id)
-    await bot.send_message(callback_query.from_user.id, f'Нажата инлайн кнопка! code={code}')
+    id = callback_query.data
+    message = get_incident(id)
+    await bot.send_message(callback_query.from_user.id, message)
 
 @dp.message_handler()
 async def get_incidents(message: types.Message):
