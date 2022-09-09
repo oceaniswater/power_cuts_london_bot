@@ -31,7 +31,7 @@ async def on_shutdown(dispatcher):
 
 @dp.message_handler(commands=['test'])
 async def send_incident(message: types.Message):
-    incident = await api_manager.ApiPowerCuts.get_incident_by_id('INCD-320571-Z')
+    incident = api_manager.ApiPowerCuts.get_incident_by_id('INCD-327196-Z')
     incident = incident.json()
     print(incident)
 
