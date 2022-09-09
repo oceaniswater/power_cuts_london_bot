@@ -47,7 +47,7 @@ async def get_incident(message: types.Message, id):
         for part in chunks:
             await message.answer(part)
 
-@dp.callback_query_handler(func=lambda c: c.data and c.data.startswith('btn'))
+@dp.callback_query_handler(func=lambda c: c.data)
 async def process_callback_kb1btn1(callback_query: types.CallbackQuery):
     code = callback_query.data[-1]
     await bot.send_message(callback_query.from_user.id, f'Нажата инлайн кнопка! code={code}')
