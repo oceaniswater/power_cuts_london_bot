@@ -6,6 +6,7 @@ from aiogram import Bot, types
 import api_manager
 import powercuts
 from requests_cache import CachedSession
+import keyboards
 
 TOKEN = os.getenv('BOT_TOKEN')
 bot = Bot(token=TOKEN)
@@ -29,16 +30,13 @@ async def on_startup(disdpatcher):
 async def on_shutdown(dispatcher):
     await bot.delete_webhook()
 
-@dp.message_handler(commands=['test'])
-async def send_incident(message: types.Message):
-    incident = api_manager.ApiPowerCuts.get_incident_by_id('INCD-327196-Z')
+async def get_incident(message: types.Message, id):
+    incident = api_manager.ApiPowerCuts.get_incident_by_id(id)
     incident = incident.json()
-    print(incident)
-
     textForUser2 = f"Incident Reference: {incident['result']['incidentReference']}\n\n" \
                    f"Power Cut Type: {incident['result']['powerCutType']}\n" \
-                   f"Detected time: {incident['result']['ukpnIncident']['receivedDate']}\n" \
-                   f"Estimated Restoration Date: {incident['result']['ukpnIncident']['estimatedRestorationDate'] if incident['result']['ukpnIncident']['estimatedRestorationDate'] is not None else 'Date unknown'}\n" \
+                   f"Detected time: {incident['result']['ukpnIncident']['receivedDate']}\n\n" \
+                   f"Estimated Restoration Date: {incident['result']['ukpnIncident']['estimatedRestorationDate'] if incident['result']['ukpnIncident']['estimatedRestorationDate'] is not None else 'Date unknown'}\n\n" \
                    f"Description: {incident['result']['incidentCategoryCustomerFriendlyDescription']}\n" \
                    f"Actual status: {[step['message'] for step in incident['result']['steps'] if step['active'] == True]}\n"
     if len(textForUser2) < 4000:
@@ -63,14 +61,14 @@ async def send_welcome(message: types.Message):
 async def get_incidents(message: types.Message):
     response = session.get('https://www.ukpowernetworks.co.uk/api/power-cut/all-incidents')
     print("Time: {0} / Used Cache: {1}".format(response.headers["Date"], response.from_cache))
-    incidents = powercuts.search_by_postcode(message.text, response.json())
+    incidents, incidentsIds = powercuts.search_by_postcode(message.text, response.json())
     if incidents:
         textForUser = ''
         for incident in incidents:
             textForUser += f"Incident Reference: {incident['incidentReference']}\n\nPower Cut Type: {incident['powerCutType']}\nDescription: {incident['incidentCategoryCustomerFriendlyDescription']}\nPost codes affected: {incident['ukpnIncident']['postCodesAffected']}\n\n"
         textForUser2 = f"Detected {len(incidents)} incidents:\n{textForUser}"
         if len(textForUser2) < 4000:
-            await message.answer(textForUser2)
+            await message.answer(textForUser2, reply_markup=keyboards.make_inline_keybord(incidentsIds))
         else:
             limit = 4000
             chunks = [textForUser2[i:i + limit] for i in range(0, len(textForUser2), limit)]
