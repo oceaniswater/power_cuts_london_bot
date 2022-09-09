@@ -61,7 +61,7 @@ async def send_welcome(message: types.Message):
 @dp.callback_query_handler(lambda c: c.data and c.data.startswith('INCD'))
 async def process_callback_kb1btn1(callback_query: types.CallbackQuery):
     code = callback_query.data
-    m = get_incident(code)
+    # m = get_incident(code)
     # await bot.send_message(callback_query.from_user.id, m)
     await get_incident(callback_query.from_user.id, code)
 
