@@ -56,7 +56,7 @@ async def send_welcome(message: types.Message):
                                                   "unofficial bot which takes open data from Distribution Network "
                                                   "Operator | UK Power Networks")
 
-@dp.callback_query_handler(func=lambda c: c.data and c.data.startswith('INCD'))
+@dp.callback_query_handler(lambda c: c.data and c.data.startswith('INCD'))
 async def process_callback_kb1btn1(callback_query: types.CallbackQuery):
     code = callback_query.data[-1]
     if code.isdigit():
